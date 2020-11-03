@@ -51,4 +51,68 @@ insert into AddressBook values
 ('Mohit','Rathi','Mumbai','Thane','Maharashtra',400604,'2013456789','mohit@gmail.com','Book1','Family'),
 ('Akhil','Rathi','Mumbai','Thane','Maharashtra',400604,'2013456789','akhil@gmail.com','Book2','Friends');
 
+/*UC12: ER Diagram*/
+/*UC12: Create table BookNameType*/
+create table BookNameType(
+ B_ID varchar(50) not null primary key,
+ B_Name varchar(50) not null,
+ B_Type varchar(50) not null,
+ );
+
+/* insert data */
+ insert into BookNameType values
+ ('BK1','Book1','Family'),
+ ('BK2','Book2','Friends'),
+ ('BK3','Book3','Profession');
+
+select * from BookNameType;
+
+/*create table Contacts*/
+create table Contacts(
+FirstName varchar(50) not null,
+LastName varchar(50) not null,
+Address varchar(50) not null,
+City varchar(50) not null,
+State varchar(50) not null,
+Zip int not null,
+PhoneNumber varchar(50) not null,
+Email varchar(50) not null,
+B_ID varchar(50) not null,
+foreign key(B_ID) references BookNameType(B_ID)
+);
+
+/* Insert data */
+insert into Contacts values
+('Rachit','Rathi','Mumbai','Juhu','Maharashtra',400054,'123456789','rachit@gmail.com','BK1'),
+('Tanmay','Maity','Kolkatta','Howrah','Bengal',600080,'0123456789','tanmay@gmail.com','BK2'),
+('Parth','Trivedi','Rajkot','Jaamnagar','Gujarat',800080,'1023456789','parth@gmail.com','BK1'),
+('Pranav','Jaguste','New Delhi','Gurgaon','Delhi',400080,'1203456789','pranav@gmail.com','BK2'),
+('Yash','Patil','Mumbai','Goregaon','Maharashtra',800080,'1234506789','yash@gmail.com','BK2'),
+('Mohit','Rathi','Mumbai','Thane','Maharashtra',400604,'2013456789','mohit@gmail.com','BK1'),
+('Akhil','Rathi','Mumbai','Thane','Maharashtra',400604,'2013456789','akhil@gmail.com','BK1');
+
+select * from Contacts;
+
+/* UC13 */
+/*  Retrive data from table */
+select CONCAT(C.FirstName,' ', C.LastName) as PersonName, C.City, C.State from Contacts C inner join BookNameType B
+on C.B_ID=B.B_ID 
+where C.City='Juhu' or C.State='Bengal';
+
+select CONCAT(C.FirstName,' ', C.LastName) as PersonName, C.City, count(C.FirstName) as TotalContactsInCity from Contacts C inner join BookNameType B
+on C.B_ID=B.B_ID 
+group by(C.City),(CONCAT(C.FirstName,' ', C.LastName))
+order by PersonName;
+
+select CONCAT(C.FirstName,' ', C.LastName) as PersonName, C.State, count(C.FirstName) as TotalContactsInState from Contacts C inner join BookNameType B
+on C.B_ID=B.B_ID 
+group by(C.State), CONCAT(C.FirstName,' ', C.LastName)
+order by PersonName;
+
+
+select B.B_Type as Types, COUNT(B.B_Type) as Total from Contacts C inner join BookNameType B
+on C.B_ID=B.B_ID 
+group by(B.B_Type);
+
+
 select * from AddressBook;
